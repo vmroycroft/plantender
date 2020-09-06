@@ -1,0 +1,8 @@
+.DS_Store
+.env
+build/
+docs/
+node_modules/
+npm-debug.log
+src/assets/styles/main.css
+**/_backup/
