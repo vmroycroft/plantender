@@ -2,7 +2,7 @@ import React from 'react';
 import { Breakpoint } from 'react-socks';
 
 import Nav from '../../components/Nav';
-import PlantChecklist from '../PlantChecklist';
+import PlantList from '../PlantList';
 
 /**
  * The Home page displays...
@@ -21,7 +21,7 @@ function Home() {
 			<Breakpoint medium down>
 				<div className="h-screen">
 					<Nav />
-					<PlantChecklist />
+					<PlantList />
 				</div>
 			</Breakpoint>
 
@@ -29,7 +29,7 @@ function Home() {
 			<Breakpoint large up>
 				<div className="bg-white">
 					<Nav />
-					<PlantChecklist />
+					<PlantList />
 				</div>
 			</Breakpoint>
 		</>

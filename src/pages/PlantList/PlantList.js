@@ -1,21 +1,21 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Breakpoint } from 'react-socks';
-import { parseISO } from 'date-fns';
 
-import Plant from './Plant';
+import PlantGroup from './PlantGroup';
 
 /**
- * The weekly plant checklist.
+ * The plant watering list.
  *
  * @component
  */
-function PlantChecklist() {
+function PlantList() {
 	const PLANTS = gql`
 		query GetPlants {
 			plants {
 				id
 				name
+				group
 				lastWatered
 			}
 		}
@@ -23,18 +23,18 @@ function PlantChecklist() {
 
 	const { loading, error, data } = useQuery(PLANTS);
 
-	let plants = [];
+	let plantGroups = [];
 	if (data) {
-		plants = data.plants.map((plant) => {
-			return (
-				<Plant
-					key={plant.id}
-					id={plant.id}
-					name={plant.name}
-					lastWatered={parseISO(plant.lastWatered)}
-				/>
-			);
-		});
+		// Get all unique plant group values (e.g. "Herbs", "Succulents", etc.)
+		plantGroups = [
+			...new Set(data.plants.map((plant) => plant.group))
+		].map((group) => (
+			<PlantGroup
+				key={`group-${group}`}
+				name={group}
+				plants={data.plants.filter((plant) => plant.group === group)}
+			/>
+		));
 	}
 
 	/**
@@ -48,19 +48,15 @@ function PlantChecklist() {
 		<>
 			{/* Render on extra small, small, and medium screens */}
 			<Breakpoint medium down>
-				<form>
-					<div>{plants}</div>
-				</form>
+				<div>{plantGroups}</div>
 			</Breakpoint>
 
 			{/* Render on large and up screens */}
 			<Breakpoint large up>
-				<form>
-					<div className="px-12 py-6">{plants}</div>
-				</form>
+				<div className="px-12 py-6">{plantGroups}</div>
 			</Breakpoint>
 		</>
 	);
 }
 
-export default PlantChecklist;
+export default PlantList;
