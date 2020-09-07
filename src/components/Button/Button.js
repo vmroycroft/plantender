@@ -7,17 +7,27 @@ import PropTypes from 'prop-types';
  * @component
  */
 function Button({ onClick, variant, className, children }) {
-	const bgColor = `bg-${variant}-500`;
-
 	/**
 	 * JSX
 	 */
+
+	// TODO Figure out a better way to return the correct button variant
+	if (variant === 'green')
+		return (
+			<button
+				type="button"
+				onClick={onClick}
+				className={`${className} py-3 px-8 rounded-full text-white bg-green-500 focus:outline-none focus:shadow-outline`}
+			>
+				{children}
+			</button>
+		);
 
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			className={`${className} ${bgColor} py-3 px-8 rounded-full text-white focus:outline-none focus:shadow-outline`}
+			className={`${className} py-3 px-8 rounded-full text-white bg-blue-500 focus:outline-none focus:shadow-outline`}
 		>
 			{children}
 		</button>
