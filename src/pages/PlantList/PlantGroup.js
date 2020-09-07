@@ -17,6 +17,7 @@ function PlantGroup({ name, plants }) {
 				id={plant.id}
 				name={plant.name}
 				lastWatered={parseISO(plant.lastWatered)}
+				lastFertilized={parseISO(plant.lastFertilized)}
 			/>
 		);
 	});
@@ -33,6 +34,7 @@ function PlantGroup({ name, plants }) {
 	);
 }
 
+// TODO Describe plants array as array of Plant objects
 PlantGroup.propTypes = {
 	name: PropTypes.string.isRequired,
 	plants: PropTypes.array.isRequired

@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
  *
  * @component
  */
-function Button({ onClick, className, children }) {
+function Button({ onClick, variant, className, children }) {
+	const bgColor = `bg-${variant}-500`;
+
 	/**
 	 * JSX
 	 */
@@ -15,7 +17,7 @@ function Button({ onClick, className, children }) {
 		<button
 			type="button"
 			onClick={onClick}
-			className={`${className} py-3 px-8 rounded-full text-white bg-blue-500 focus:outline-none focus:shadow-outline`}
+			className={`${className} ${bgColor} py-3 px-8 rounded-full text-white focus:outline-none focus:shadow-outline`}
 		>
 			{children}
 		</button>
@@ -23,12 +25,14 @@ function Button({ onClick, className, children }) {
 }
 
 Button.defaultProps = {
+	variant: 'blue',
 	className: ''
 };
 
 Button.propTypes = {
-	onClick: PropTypes.func.isRequired,
 	children: PropTypes.string.isRequired,
+	onClick: PropTypes.func.isRequired,
+	variant: PropTypes.string,
 	className: PropTypes.string
 };
 

@@ -17,6 +17,7 @@ function PlantList() {
 				name
 				group
 				lastWatered
+				lastFertilized
 			}
 		}
 	`;
