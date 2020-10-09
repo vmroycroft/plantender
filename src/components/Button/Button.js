@@ -12,12 +12,12 @@ function Button({ onClick, variant, className, children }) {
 	 */
 
 	// TODO Figure out a better way to return the correct button variant
-	if (variant === 'green')
+	if (variant === 'brown')
 		return (
 			<button
 				type="button"
 				onClick={onClick}
-				className={`${className} py-3 px-8 rounded-full text-white bg-green-500 focus:outline-none focus:shadow-outline`}
+				className={`${className} rounded-md py-2 px-4 text-white bg-brown-500 border-b-4 active:border-b-1 border-brown-700 focus:outline-none focus:shadow-outline`}
 			>
 				{children}
 			</button>
@@ -27,7 +27,7 @@ function Button({ onClick, variant, className, children }) {
 		<button
 			type="button"
 			onClick={onClick}
-			className={`${className} py-3 px-8 rounded-full text-white bg-blue-500 focus:outline-none focus:shadow-outline`}
+			className={`${className} rounded-md py-2 px-4 text-white bg-blue-500 border-b-4 active:border-b-1 border-blue-700 focus:outline-none focus:shadow-outline`}
 		>
 			{children}
 		</button>

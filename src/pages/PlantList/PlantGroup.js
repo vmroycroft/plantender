@@ -27,7 +27,7 @@ function PlantGroup({ name, plants }) {
 	 */
 
 	return (
-		<div>
+		<div className="p-4">
 			<h2 className="text-2xl">{name}</h2>
 			{plantComponents}
 		</div>

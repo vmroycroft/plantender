@@ -1,8 +1,9 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Breakpoint } from 'react-socks';
+import { parseISO } from 'date-fns';
 
-import PlantGroup from './PlantGroup';
+import Plant from './Plant';
 
 /**
  * The plant watering list.
@@ -24,18 +25,34 @@ function PlantList() {
 
 	const { loading, error, data } = useQuery(PLANTS);
 
-	let plantGroups = [];
+	// let plantGroups = [];
+	let plants = [];
 	if (data) {
-		// Get all unique plant group values (e.g. "Herbs", "Succulents", etc.)
-		plantGroups = [
-			...new Set(data.plants.map((plant) => plant.group))
-		].map((group) => (
-			<PlantGroup
-				key={`group-${group}`}
-				name={group}
-				plants={data.plants.filter((plant) => plant.group === group)}
-			/>
-		));
+		plants = data.plants.map((plant) => {
+			return (
+				<Plant
+					key={plant.id}
+					id={plant.id}
+					name={plant.name}
+					lastWatered={parseISO(plant.lastWatered)}
+					lastFertilized={parseISO(plant.lastFertilized)}
+				/>
+			);
+		});
+
+		// order by last watered
+		plants.sort((a, b) => a.props.lastWatered - b.props.lastWatered);
+
+		// // Get all unique plant group values (e.g. "Herbs", "Succulents", etc.)
+		// plantGroups = [
+		// 	...new Set(data.plants.map((plant) => plant.group))
+		// ].map((group) => (
+		// 	<PlantGroup
+		// 		key={`group-${group}`}
+		// 		name={group}
+		// 		plants={data.plants.filter((plant) => plant.group === group)}
+		// 	/>
+		// ));
 	}
 
 	/**
@@ -49,12 +66,12 @@ function PlantList() {
 		<>
 			{/* Render on extra small, small, and medium screens */}
 			<Breakpoint medium down>
-				<div>{plantGroups}</div>
+				<div>{plants}</div>
 			</Breakpoint>
 
 			{/* Render on large and up screens */}
 			<Breakpoint large up>
-				<div className="px-12 py-6">{plantGroups}</div>
+				<div className="px-12 py-6">{plants}</div>
 			</Breakpoint>
 		</>
 	);

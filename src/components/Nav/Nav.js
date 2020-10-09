@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breakpoint } from 'react-socks';
 
-import logo from '../../assets/images/rain-tracker-logo.svg';
+import logo from '../../assets/images/logo.svg';
 
 /**
  * The top navbar.
@@ -17,17 +17,17 @@ function Nav() {
 		<>
 			{/* Render on extra small, small, and medium screens */}
 			<Breakpoint medium down>
-				<nav className="flex items-center bg-tan-200 p-4">
-					<img src={logo} alt="" className="pr-4 w-16" />
-					<h1 className="text-xl">Waterlog</h1>
+				<nav className="flex justify-center items-end p-4">
+					<img src={logo} alt="" className="w-16" />
+					<h1 className="text-3xl text-gray-700">Plantender</h1>
 				</nav>
 			</Breakpoint>
 
 			{/* Render on large and up screens */}
 			<Breakpoint large up>
-				<nav className="flex items-center p-8">
-					<img src={logo} alt="" className="pr-4 w-32" />
-					<h1 className="text-4xl">Waterlog</h1>
+				<nav className="flex items-end p-4">
+					<img src={logo} alt="" className="w-16" />
+					<h1 className="text-3xl">Plantender</h1>
 				</nav>
 			</Breakpoint>
 		</>

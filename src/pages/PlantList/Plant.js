@@ -1,11 +1,16 @@
-import React, { forwardRef } from 'react';
+import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
 import { format, formatDistanceToNow, formatISO, isBefore } from 'date-fns';
+import { Modal } from 'react-responsive-modal';
 import DatePicker from 'react-datepicker';
 
 import Button from '../../components/Button';
 
+import waterImage from '../../assets/images/water.svg';
+import fertilizeImage from '../../assets/images/fertilize.svg';
+
+import 'react-responsive-modal/styles.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 /**
@@ -14,6 +19,9 @@ import 'react-datepicker/dist/react-datepicker.css';
  * @component
  */
 function Plant({ id, name, lastWatered, lastFertilized }) {
+	const [isWaterModalOpen, setIsWaterModalOpen] = useState(false);
+	const [isFertilizeModalOpen, setIsFertilizeModalOpen] = useState(false);
+
 	// TODO Put GraphQL queries and mutations in their own folder
 	const WATER_PLANT = gql`
 		mutation WaterPlant($id: String!, $date: String!) {
@@ -48,33 +56,41 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	const [waterPlant] = useMutation(WATER_PLANT);
 	const [fertilizePlant] = useMutation(FERTILIZE_PLANT);
 
-	// see https://github.com/Hacker0x01/react-datepicker/issues/2104
-	// TODO Fix eslint errors
-	const DatePickerButton = forwardRef(
-		({ text, onClick, variant, className }, ref) => {
-			return (
-				<Button onClick={onClick} variant={variant} className={className}>
-					{text}
-				</Button>
-			);
-		}
-	);
+	// // see https://github.com/Hacker0x01/react-datepicker/issues/2104
+	// // TODO Fix eslint errors
+	// const DatePickerButton = forwardRef(
+	// 	({ text, onClick, variant, className }, ref) => {
+	// 		return (
+	// 			<Button onClick={onClick} variant={variant} className={className}>
+	// 				{text}
+	// 			</Button>
+	// 		);
+	// 	}
+	// );
 
 	/**
 	 * Functions
 	 */
 
+	const capitalizeFirstLetter = (text) => {
+		return text.charAt(0).toUpperCase() + text.slice(1);
+	};
+
 	/**
 	 * Returns a string stating when the plant was last watered.
 	 */
 	const getLastWateredMessage = () => {
-		const date = format(lastWatered, 'EEEE MMMM d, y');
-		const howLongAgo = formatDistanceToNow(lastWatered, { addSuffix: true });
+		const date = format(lastWatered, 'E MMM d, y');
+		const howLongAgo = capitalizeFirstLetter(
+			formatDistanceToNow(lastWatered, { addSuffix: true })
+		);
 
 		return (
 			<>
-				Last <span className="text-blue-500">watered</span> on {date} (
-				{howLongAgo})
+				<img src={waterImage} alt="" className="inline-block w-4" />
+				<span className="text-gray-700 ml-2 mr-6">{date}</span>
+				{/* <span className="text-sm text-gray-500">Due in 5 days</span> */}
+				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
 			</>
 		);
 	};
@@ -83,13 +99,17 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	 * Returns a string stating when the plant was last fertilized.
 	 */
 	const getLastFertilizedMessage = () => {
-		const date = format(lastFertilized, 'EEEE MMMM d, y');
-		const howLongAgo = formatDistanceToNow(lastFertilized, { addSuffix: true });
+		const date = format(lastFertilized, 'E MMM d, y');
+		const howLongAgo = capitalizeFirstLetter(
+			formatDistanceToNow(lastFertilized, { addSuffix: true })
+		);
 
 		return (
 			<>
-				Last <span className="text-green-500">fertilized</span> on {date} (
-				{howLongAgo})
+				<img src={fertilizeImage} alt="" className="inline-block w-4" />
+				<span className="text-gray-700 ml-2 mr-6">{date}</span>
+				{/* <span className="text-sm text-gray-500">Due in 5 days</span> */}
+				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
 			</>
 		);
 	};
@@ -110,8 +130,23 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	/**
 	 *
 	 */
+	const openWater = () => {
+		setIsWaterModalOpen(true);
+	};
+
+	/**
+	 *
+	 */
+	const openFertilize = () => {
+		setIsFertilizeModalOpen(true);
+	};
+
+	/**
+	 *
+	 */
 	const water = (date) => {
 		waterPlant({ variables: { id, date: formatDate(date) } });
+		setIsWaterModalOpen(false);
 	};
 
 	/**
@@ -119,6 +154,7 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	 */
 	const fertilize = (date) => {
 		fertilizePlant({ variables: { id, date: formatDate(date) } });
+		setIsFertilizeModalOpen(false);
 	};
 
 	/**
@@ -126,31 +162,59 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	 */
 
 	return (
-		<div className="flex justify-between border-b border-tan-300 p-4">
-			<div>
-				<h3 className="text-lg mb-2">{name}</h3>
-				<div className="text-sm mb-2">{getLastWateredMessage()}</div>
-				<div className="text-sm">{getLastFertilizedMessage()}</div>
+		<>
+			<div className="border-b border-tan-300 p-4">
+				<h3 className="text-xl text-gray-700 mb-2">{name}</h3>
+				<div className="mb-2">{getLastWateredMessage()}</div>
+				<div className="mb-4">{getLastFertilizedMessage()}</div>
+				<div className="text-center">
+					<Button onClick={openWater} className="mr-4">
+						Water
+					</Button>
+					<Button onClick={openFertilize} variant="brown">
+						Fertilize
+					</Button>
+				</div>
 			</div>
-			<div>
+			<Modal
+				open={isWaterModalOpen}
+				onClose={() => setIsWaterModalOpen(false)}
+				center
+			>
+				<img src={waterImage} alt="" className="inline-block w-4" />
+				<h2 className="inline-block text-lg ml-2 mb-6">{name}</h2>
+				<Button className="block w-full mb-6" onClick={() => water(new Date())}>
+					Today
+				</Button>
 				<DatePicker
 					selected={lastWatered}
 					onChange={(date) => water(date)}
-					customInput={<DatePickerButton className="mb-4" text="Water" />}
 					filterDate={(date) => isBefore(date, new Date())}
-					todayButton="Today"
-					withPortal
+					inline
 				/>
+			</Modal>
+			<Modal
+				open={isFertilizeModalOpen}
+				onClose={() => setIsFertilizeModalOpen(false)}
+				center
+			>
+				<img src={fertilizeImage} alt="" className="inline-block w-4" />
+				<h2 className="inline-block text-lg ml-2 mb-6">{name}</h2>
+				<Button
+					className="block w-full mb-6"
+					onClick={() => fertilize(new Date())}
+					variant="brown"
+				>
+					Today
+				</Button>
 				<DatePicker
 					selected={lastFertilized}
 					onChange={(date) => fertilize(date)}
-					customInput={<DatePickerButton text="Fertilize" variant="green" />}
 					filterDate={(date) => isBefore(date, new Date())}
-					todayButton="Today"
-					withPortal
+					inline
 				/>
-			</div>
-		</div>
+			</Modal>
+		</>
 	);
 }
 

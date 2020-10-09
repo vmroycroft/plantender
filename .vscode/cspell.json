@@ -1,6 +1,12 @@
 {
-	"version": "0.1",
-	"language": "en",
-	"words": ["browserslist", "loglevel", "tailwindcss"],
-	"flagWords": []
+    "version": "0.1",
+    "language": "en",
+    "words": [
+        "browserslist",
+        "datepicker",
+        "loglevel",
+        "plantender",
+        "tailwindcss"
+    ],
+    "flagWords": []
 }
