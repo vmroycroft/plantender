@@ -19,6 +19,7 @@ function PlantList() {
 				group
 				lastWatered
 				lastFertilized
+				fertilizeFrequency
 			}
 		}
 	`;
@@ -35,7 +36,12 @@ function PlantList() {
 					id={plant.id}
 					name={plant.name}
 					lastWatered={parseISO(plant.lastWatered)}
-					lastFertilized={parseISO(plant.lastFertilized)}
+					lastFertilized={
+						plant.lastFertilized ? parseISO(plant.lastFertilized) : null
+					}
+					fertilizeFrequency={
+						plant.fertilizeFrequency ? plant.fertilizeFrequency : 0
+					}
 				/>
 			);
 		});

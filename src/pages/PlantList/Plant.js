@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
-import { format, formatDistanceToNow, formatISO, isBefore } from 'date-fns';
+import {
+	add,
+	format,
+	formatDistanceToNow,
+	formatISO,
+	isBefore
+} from 'date-fns';
 import { Modal } from 'react-responsive-modal';
 import DatePicker from 'react-datepicker';
 
@@ -18,7 +24,7 @@ import 'react-datepicker/dist/react-datepicker.css';
  *
  * @component
  */
-function Plant({ id, name, lastWatered, lastFertilized }) {
+function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	const [isWaterModalOpen, setIsWaterModalOpen] = useState(false);
 	const [isFertilizeModalOpen, setIsFertilizeModalOpen] = useState(false);
 
@@ -56,18 +62,6 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	const [waterPlant] = useMutation(WATER_PLANT);
 	const [fertilizePlant] = useMutation(FERTILIZE_PLANT);
 
-	// // see https://github.com/Hacker0x01/react-datepicker/issues/2104
-	// // TODO Fix eslint errors
-	// const DatePickerButton = forwardRef(
-	// 	({ text, onClick, variant, className }, ref) => {
-	// 		return (
-	// 			<Button onClick={onClick} variant={variant} className={className}>
-	// 				{text}
-	// 			</Button>
-	// 		);
-	// 	}
-	// );
-
 	/**
 	 * Functions
 	 */
@@ -88,7 +82,7 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 		return (
 			<>
 				<img src={waterImage} alt="" className="inline-block w-4" />
-				<span className="text-gray-700 ml-2 mr-6">{date}</span>
+				<span className="text-gray-700 ml-2 mr-8">{date}</span>
 				{/* <span className="text-sm text-gray-500">Due in 5 days</span> */}
 				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
 			</>
@@ -103,12 +97,21 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 		const howLongAgo = capitalizeFirstLetter(
 			formatDistanceToNow(lastFertilized, { addSuffix: true })
 		);
+		const nextFertilize = formatDistanceToNow(
+			add(lastFertilized, { days: fertilizeFrequency })
+		);
+		const nextFertilizeMessage =
+			nextFertilize > new Date() ? 'Due in' : 'Overdue by';
 
 		return (
 			<>
 				<img src={fertilizeImage} alt="" className="inline-block w-4" />
-				<span className="text-gray-700 ml-2 mr-6">{date}</span>
-				{/* <span className="text-sm text-gray-500">Due in 5 days</span> */}
+				<span className="text-gray-700 ml-2 mr-8">{date}</span>
+				{fertilizeFrequency && (
+					<span className="text-sm text-gray-500">
+						{nextFertilizeMessage} {nextFertilize}
+					</span>
+				)}
 				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
 			</>
 		);
@@ -166,14 +169,18 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 			<div className="border-b border-tan-300 p-4">
 				<h3 className="text-xl text-gray-700 mb-2">{name}</h3>
 				<div className="mb-2">{getLastWateredMessage()}</div>
-				<div className="mb-4">{getLastFertilizedMessage()}</div>
+				{lastFertilized && (
+					<div className="mb-4">{getLastFertilizedMessage()}</div>
+				)}
 				<div className="text-center">
 					<Button onClick={openWater} className="mr-4">
 						Water
 					</Button>
-					<Button onClick={openFertilize} variant="brown">
-						Fertilize
-					</Button>
+					{lastFertilized && (
+						<Button onClick={openFertilize} variant="brown">
+							Fertilize
+						</Button>
+					)}
 				</div>
 			</div>
 			<Modal
@@ -218,11 +225,17 @@ function Plant({ id, name, lastWatered, lastFertilized }) {
 	);
 }
 
+Plant.defaultProps = {
+	lastFertilized: null,
+	fertilizeFrequency: 0
+};
+
 Plant.propTypes = {
 	id: PropTypes.string.isRequired,
 	name: PropTypes.string.isRequired,
 	lastWatered: PropTypes.instanceOf(Date).isRequired,
-	lastFertilized: PropTypes.instanceOf(Date).isRequired
+	lastFertilized: PropTypes.instanceOf(Date),
+	fertilizeFrequency: PropTypes.number
 };
 
 export default Plant;
