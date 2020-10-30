@@ -7,7 +7,7 @@ import Home from './pages/Home';
 
 function App() {
 	const client = new ApolloClient({
-		uri: process.env.REACT_APP_WATERLOG_SERVER_URL,
+		uri: process.env.REACT_APP_PLANTENDER_SERVER_URL,
 		cache: new InMemoryCache()
 	});
 

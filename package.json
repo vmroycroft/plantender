@@ -1,5 +1,5 @@
 {
-	"name": "waterlog",
+	"name": "plantender",
 	"version": "0.1.0",
 	"scripts": {
 		"start": "npm run build:css && react-scripts start",
