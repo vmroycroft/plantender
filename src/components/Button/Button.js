@@ -17,6 +17,8 @@ function Button({ onClick, variant, className, children }) {
 			<button
 				type="button"
 				onClick={onClick}
+				// TODO Is there a better way to prevent the page from scrolling to the focused button?
+				onMouseDown={(e) => e.preventDefault()}
 				className={`${className} rounded-md py-2 px-4 text-white bg-brown-500 border-b-4 active:border-b-1 border-brown-700 focus:outline-none focus:shadow-outline`}
 			>
 				{children}
@@ -27,6 +29,8 @@ function Button({ onClick, variant, className, children }) {
 		<button
 			type="button"
 			onClick={onClick}
+			// TODO Is there a better way to prevent the page from scrolling to the focused button?
+			onMouseDown={(e) => e.preventDefault()}
 			className={`${className} rounded-md py-2 px-4 text-white bg-blue-500 border-b-4 active:border-b-1 border-blue-700 focus:outline-none focus:shadow-outline`}
 		>
 			{children}
