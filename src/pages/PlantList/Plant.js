@@ -75,6 +75,7 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	 */
 	const getLastWateredMessage = () => {
 		const date = format(lastWatered, 'E MMM d, y');
+
 		const howLongAgo = capitalizeFirstLetter(
 			formatDistanceToNow(lastWatered, { addSuffix: true })
 		);
@@ -83,7 +84,6 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 			<>
 				<img src={waterImage} alt="" className="inline-block w-4" />
 				<span className="text-gray-700 ml-2 mr-8">{date}</span>
-				{/* <span className="text-sm text-gray-500">Due in 5 days</span> */}
 				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
 			</>
 		);
@@ -94,14 +94,15 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	 */
 	const getLastFertilizedMessage = () => {
 		const date = format(lastFertilized, 'E MMM d, y');
+
 		const howLongAgo = capitalizeFirstLetter(
 			formatDistanceToNow(lastFertilized, { addSuffix: true })
 		);
-		const nextFertilize = formatDistanceToNow(
-			add(lastFertilized, { days: fertilizeFrequency })
-		);
+
+		const nextFertilize = add(lastFertilized, { days: fertilizeFrequency });
+
 		const nextFertilizeMessage =
-			nextFertilize > new Date() ? 'Due in' : 'Overdue by';
+			(nextFertilize > new Date() ? 'Due in ' : 'Overdue by ') + formatDistanceToNow(nextFertilize);
 
 		return (
 			<>
@@ -109,7 +110,7 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 				<span className="text-gray-700 ml-2 mr-8">{date}</span>
 				{fertilizeFrequency && (
 					<span className="text-sm text-gray-500">
-						{nextFertilizeMessage} {nextFertilize}
+						{nextFertilizeMessage}
 					</span>
 				)}
 				<div className="text-sm text-gray-500 ml-6 -mt-1">{howLongAgo}</div>
@@ -123,6 +124,7 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	const formatDate = (date) => {
 		// The time being passed from react-datepicker isn't 'now', so change it here
 		const now = new Date();
+
 		date.setHours(now.getHours());
 		date.setMinutes(now.getMinutes());
 		date.setSeconds(now.getSeconds());
@@ -149,6 +151,7 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	 */
 	const water = (date) => {
 		waterPlant({ variables: { id, date: formatDate(date) } });
+
 		setIsWaterModalOpen(false);
 	};
 
@@ -157,6 +160,7 @@ function Plant({ id, name, lastWatered, lastFertilized, fertilizeFrequency }) {
 	 */
 	const fertilize = (date) => {
 		fertilizePlant({ variables: { id, date: formatDate(date) } });
+
 		setIsFertilizeModalOpen(false);
 	};
 
