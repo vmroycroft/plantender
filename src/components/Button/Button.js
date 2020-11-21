@@ -25,6 +25,19 @@ function Button({ onClick, variant, className, children }) {
 			</button>
 		);
 
+		if (variant === 'icon')
+		return (
+			<button
+				type="button"
+				onClick={onClick}
+				// TODO Is there a better way to prevent the page from scrolling to the focused button?
+				onMouseDown={(e) => e.preventDefault()}
+				className={className}
+			>
+				{children}
+			</button>
+		);
+
 	return (
 		<button
 			type="button"
@@ -44,7 +57,7 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
-	children: PropTypes.string.isRequired,
+	children: PropTypes.node.isRequired,
 	onClick: PropTypes.func.isRequired,
 	variant: PropTypes.string,
 	className: PropTypes.string

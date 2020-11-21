@@ -1,0 +1,8 @@
+.undo {
+	position: absolute;
+	top: 19px;
+	right: 50px;
+	cursor: pointer;
+	height: auto;
+	width: 18px;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breakpoint } from 'react-socks';
 
-import logo from '../../assets/images/logo.svg';
+import logo from 'assets/images/logo.svg';
 
 /**
  * The top navbar.

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Breakpoint } from 'react-socks';
 
-import Nav from '../../components/Nav';
-import PlantList from '../PlantList';
+import Nav from 'components/Nav';
+import PlantList from 'pages/PlantList';
 
 /**
  * The Home page displays...

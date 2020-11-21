@@ -17,8 +17,8 @@ function PlantList() {
 				id
 				name
 				group
-				lastWatered
-				lastFertilized
+				watered
+				fertilized
 				fertilizeFrequency
 			}
 		}
@@ -26,7 +26,6 @@ function PlantList() {
 
 	const { loading, error, data } = useQuery(PLANTS);
 
-	// let plantGroups = [];
 	let plants = [];
 	if (data) {
 		plants = data.plants.map((plant) => {
@@ -35,10 +34,8 @@ function PlantList() {
 					key={plant.id}
 					id={plant.id}
 					name={plant.name}
-					lastWatered={parseISO(plant.lastWatered)}
-					lastFertilized={
-						plant.lastFertilized ? parseISO(plant.lastFertilized) : null
-					}
+					watered={plant.watered}
+					fertilized={plant.fertilized ? plant.fertilized : null}
 					fertilizeFrequency={
 						plant.fertilizeFrequency ? plant.fertilizeFrequency : 0
 					}
@@ -47,18 +44,9 @@ function PlantList() {
 		});
 
 		// order by last watered
-		plants.sort((a, b) => a.props.lastWatered - b.props.lastWatered);
-
-		// // Get all unique plant group values (e.g. "Herbs", "Succulents", etc.)
-		// plantGroups = [
-		// 	...new Set(data.plants.map((plant) => plant.group))
-		// ].map((group) => (
-		// 	<PlantGroup
-		// 		key={`group-${group}`}
-		// 		name={group}
-		// 		plants={data.plants.filter((plant) => plant.group === group)}
-		// 	/>
-		// ));
+		plants.sort(
+			(a, b) => parseISO(a.props.watered[0]) - parseISO(b.props.watered[0])
+		);
 	}
 
 	/**

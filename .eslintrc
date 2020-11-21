@@ -15,19 +15,19 @@
 		"jest": true,
 		"node": true
 	},
-	"plugins": [
-		"react",
-		"prettier",
-		"jsx-a11y"
-	],
+	"plugins": ["react", "prettier", "jsx-a11y"],
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"paths": ["src"]
+			}
+		}
+	},
 	"rules": {
 		"react/jsx-filename-extension": [
 			1,
 			{
-				"extensions": [
-					".js",
-					".jsx"
-				]
+				"extensions": [".js", ".jsx"]
 			}
 		],
 		"react/forbid-prop-types": "off"
